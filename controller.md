@@ -118,8 +118,8 @@ systemctl start openstack-nova-api.service \
 
 
 ```
-
-#network 
+-------------------------------
+# network 
 https://docs.openstack.org/neutron/queens/install/controller-install-rdo.html#prerequisites
 1. mysql -u root -p
 2. mysql_script
@@ -136,14 +136,14 @@ GRANT ALL PRIVILEGES ON neutron.* TO 'neutron'@'%'   IDENTIFIED BY 'lizhixuan123
 8. openstack endpoint create --region RegionOne  network internal http://controller:9696
 9. openstack endpoint create --region RegionOne   network admin http://controller:9696
 
-
+----------------------------------------
 ##select network type
 
 Choose one of the following networking options to configure services specific to it. Afterwards, return here and proceed to Configure the metadata agent.
 
 Networking Option 1: Provider networks
 Networking Option 2: Self-service networks
-
+--------------------------------
 ### use option 1
 https://docs.openstack.org/neutron/queens/install/controller-install-option1-rdo.html
 1. yum install openstack-neutron openstack-neutron-ml2  openstack-neutron-linuxbridge ebtables
@@ -248,7 +248,7 @@ enable_isolated_metadata = true
 
 ```
 
-
+-------------------------------------
 # continue
 1. Edit the `/etc/neutron/metadata_agent.ini` file and complete the following actions:
 In the [DEFAULT] section, configure the metadata host and shared secret:
