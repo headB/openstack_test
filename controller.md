@@ -22,7 +22,7 @@ GRANT ALL PRIVILEGES ON nova_cell0.* TO 'nova'@'%'  IDENTIFIED BY 'lizhixuan123!
 7. `openstack endpoint create --region RegionOne  compute public http://controller:8774/v2.1`
 8. `openstack endpoint create --region RegionOne  compute internal http://controller:8774/v2.1`
 9. `openstack endpoint create --region RegionOne   compute admin http://controller:8774/v2.1`
-10. openstack user create --domain default --password-prompt lizhixuan123
+10. openstack user create --domain default --password-prompt placement
 11. openstack role add --project service --user placement admin
 12. openstack service create --name placement --description "Placement API" placement
 13. `openstack endpoint create --region RegionOne placement public http://controller:8778`
