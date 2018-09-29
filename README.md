@@ -104,6 +104,8 @@ keystone-manage bootstrap --bootstrap-password lizhixuan123 \
 # Replace ADMIN_PASS with a suitable password for an administrative user.
 ```
 8. Configure the Apache HTTP server¶
+    https://docs.openstack.org/keystone/queens/install/keystone-install-rdo.html
+
     1. Edit the `/etc/httpd/conf/httpd.conf` file and configure the ServerName option to reference the controller node:
     ```python
     ServerName controller
@@ -126,4 +128,61 @@ keystone-manage bootstrap --bootstrap-password lizhixuan123 \
     # Replace ADMIN_PASS with the password used in the keystone-manage bootstrap command in keystone-install-configure-rdo.
     ```
 
+## Create a domain, projects, users, and roles
+https://docs.openstack.org/keystone/queens/install/keystone-users-rdo.html
 
+1. openstack domain create --description "An Example Domain" example
+2. openstack project create --domain default --description "Service Project" service
+3. openstack project create --domain default --description "Demo Project" demo
+4. openstack user create --domain default   --password-prompt demo
+5. openstack role create user
+6. openstack role add --project demo --user demo user
+
+## Verify operation
+https://docs.openstack.org/keystone/queens/install/keystone-verify-rdo.html
+1. unset OS_AUTH_URL OS_PASSWORD
+2. As the admin user, request an authentication token:
+```python
+openstack --os-auth-url http://controller:35357/v3 \
+  --os-project-domain-name Default --os-user-domain-name Default \
+  --os-project-name admin --os-username admin token issue
+```
+3. As the demo user, request an authentication token:
+```python
+openstack --os-auth-url http://controller:5000/v3 \
+  --os-project-domain-name Default --os-user-domain-name Default \
+  --os-project-name demo --os-username demo token issue
+```
+
+
+## Creating the scripts¶
+https://docs.openstack.org/keystone/queens/install/keystone-openrc-rdo.html
+
+1. Create and edit the `admin-openrc` file and add the following content:
+```python
+export OS_PROJECT_DOMAIN_NAME=Default
+export OS_USER_DOMAIN_NAME=Default
+export OS_PROJECT_NAME=admin
+export OS_USERNAME=admin
+export OS_PASSWORD=lizhixuan123
+export OS_AUTH_URL=http://controller:5000/v3
+export OS_IDENTITY_API_VERSION=3
+export OS_IMAGE_API_VERSION=2
+```
+2. Create and edit the `demo-openrc` file and add the following content:
+```python
+export OS_PROJECT_DOMAIN_NAME=Default
+export OS_USER_DOMAIN_NAME=Default
+export OS_PROJECT_NAME=demo
+export OS_USERNAME=demo
+export OS_PASSWORD=lizhixuan123
+export OS_AUTH_URL=http://controller:5000/v3
+export OS_IDENTITY_API_VERSION=3
+export OS_IMAGE_API_VERSION=2
+```
+3. Using the scripts¶
+    1. `. admin-openrc`
+    2. Request an authentication token:
+    ```python
+    openstack token issue
+    ```
