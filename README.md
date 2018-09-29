@@ -49,13 +49,13 @@ Passwords¶
 5. Message Queue
     1. yum install rabbitmq-server
     2.  systemctl enable rabbitmq-server.service
-        systemctl start rabbitmq-server.service
-    3. rabbitmqctl add_user openstack RABBIT_PASS  (Replace RABBIT_PASS with a suitable password.)
-    4. rabbitmqctl set_permissions openstack ".*" ".*" ".*" (Permit configuration, write, and read access for the openstack user:)
+        1. systemctl start rabbitmq-server.service
+    3. `rabbitmqctl add_user openstack RABBIT_PASS`  (Replace RABBIT_PASS with a suitable password.)
+    4. `rabbitmqctl set_permissions openstack ".*" ".*" ".*"` (Permit configuration, write, and read access for the openstack user:)
 
 6. Etcd
     1. yum install memcached python-memcached
-    2. Edit the /etc/sysconfig/memcached file and complete the following actions:
+    2. Edit the `/etc/sysconfig/memcached` file and complete the following actions:
     Configure the service to use the management IP address of the controller node. This is to enable access by other nodes via the management network:
     OPTIONS="-l 127.0.0.1,::1,controller"
     3. systemctl enable memcached.service
@@ -87,5 +87,43 @@ connection = mysql+pymysql://keystone:KEYSTONE_DBPASS@controller/keystone
 # ...
 provider = fernet
 ```
-5. su -s /bin/sh -c "keystone-manage db_sync" keystone
-6. 
+5. `su -s /bin/sh -c "keystone-manage db_sync" keystone`
+6. Initialize Fernet key repositories:
+```python
+keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
+keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
+```
+7. Bootstrap the Identity service:
+```python
+keystone-manage bootstrap --bootstrap-password lizhixuan123 \
+  --bootstrap-admin-url http://controller:5000/v3/ \
+  --bootstrap-internal-url http://controller:5000/v3/ \
+  --bootstrap-public-url http://controller:5000/v3/ \
+  --bootstrap-region-id RegionOne
+
+# Replace ADMIN_PASS with a suitable password for an administrative user.
+```
+8. Configure the Apache HTTP server¶
+    1. Edit the `/etc/httpd/conf/httpd.conf` file and configure the ServerName option to reference the controller node:
+    ```python
+    ServerName controller
+    ```
+    2. `ln -s /usr/share/keystone/wsgi-keystone.conf /etc/httpd/conf.d/`
+    3. installation
+    ```python
+    systemctl enable httpd.service
+    systemctl start httpd.service
+    ```
+    4. Configure the administrative account
+    ```python
+    export OS_USERNAME=admin
+    export OS_PASSWORD=lizhixuan123
+    export OS_PROJECT_NAME=admin
+    export OS_USER_DOMAIN_NAME=Default
+    export OS_PROJECT_DOMAIN_NAME=Default
+    export OS_AUTH_URL=http://controller:35357/v3
+    export OS_IDENTITY_API_VERSION=3
+    # Replace ADMIN_PASS with the password used in the keystone-manage bootstrap command in keystone-install-configure-rdo.
+    ```
+
+
