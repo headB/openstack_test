@@ -147,3 +147,11 @@ password = lizhixuan123
 2. systemctl restart openstack-nova-compute.service
 3. systemctl enable neutron-linuxbridge-agent.service
 4. systemctl start neutron-linuxbridge-agent.service
+
+------------------
+---------------------
+
+# Add the compute node to the cell database¶
+1. . admin-openrc
+2. su -s /bin/sh -c "nova-manage cell_v2 discover_hosts --verbose" nova
+3. 
