@@ -60,7 +60,7 @@ password = lizhixuan123
 ```
 
 3. egrep -c '(vmx|svm)' /proc/cpuinfo
-4. Edit the [libvirt] section in the /etc/nova/nova.conf file as follows:
+4. 注意,这一步,除非不知道硬件的虚拟化,才设置这个地方! Edit the [libvirt] section in the /etc/nova/nova.conf file as follows:
 ```python
 [libvirt]
 # ...
