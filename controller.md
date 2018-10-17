@@ -116,6 +116,10 @@ systemctl start openstack-nova-api.service \
   openstack-nova-consoleauth.service openstack-nova-scheduler.service \
   openstack-nova-conductor.service openstack-nova-novncproxy.service
 
+#重启命令
+systemctl restart openstack-nova-api.service \
+  openstack-nova-consoleauth.service openstack-nova-scheduler.service \
+  openstack-nova-conductor.service openstack-nova-novncproxy.service
 
 ```
 -------------------------------
@@ -233,8 +237,8 @@ firewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
 
 5. Ensure your Linux operating system kernel supports network bridge filters by verifying all the following sysctl values are set to 1:
 ```python
-net.bridge.bridge-nf-call-iptables
-net.bridge.bridge-nf-call-ip6tables
+net.bridge.bridge-nf-call-iptables = 1
+net.bridge.bridge-nf-call-ip6tables = 1
 ```
 
 6. Edit the /etc/neutron/dhcp_agent.ini file and complete the following actions:
@@ -295,6 +299,13 @@ systemctl enable neutron-server.service \
 systemctl start neutron-server.service \
   neutron-linuxbridge-agent.service neutron-dhcp-agent.service \
   neutron-metadata-agent.service
+  
+#重启命令
+systemctl restart neutron-server.service \
+  neutron-linuxbridge-agent.service neutron-dhcp-agent.service \
+  neutron-metadata-agent.service
+
+  
   
 ```
 7. systemctl enable neutron-l3-agent.service
