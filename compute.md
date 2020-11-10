@@ -39,7 +39,7 @@ novncproxy_base_url = http://controller:6080/vnc_auto.html
 
 api_servers = http://controller:9292
 
-oslo_concurrency]
+[oslo_concurrency]
 
 lock_path = /var/lib/nova/tmp
 
