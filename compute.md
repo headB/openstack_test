@@ -3,6 +3,7 @@ https://docs.openstack.org/nova/queens/install/compute-install-rdo.html#install-
 1. yum install openstack-nova-compute
 2. Edit the /etc/nova/nova.conf file and complete the following actions:
 In the [DEFAULT] section, enable only the compute and metadata APIs:
+### 下面是是第一份配置,写在 /etc/nova/nova.conf
 ```python
 
 [DEFAULT]
@@ -81,6 +82,7 @@ https://docs.openstack.org/neutron/queens/install/compute-install-rdo.html#insta
 
 1. yum install openstack-neutron-linuxbridge ebtables ipset
 2. Edit the /etc/neutron/neutron.conf file and complete the following actions:
+### 下面是是第二份配置,写在 /etc/neutron/neutron.conf (不要忘记配置我,不然后果很严重)
 ```python
 [DEFAULT]
 
