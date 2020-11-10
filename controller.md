@@ -190,7 +190,7 @@ project_name = service
 username = nova
 password = lizhixuan123
 
-oslo_concurrency]
+[oslo_concurrency]
 # ...
 lock_path = /var/lib/neutron/tmp
 
